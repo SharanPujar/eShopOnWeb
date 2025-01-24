@@ -120,7 +120,7 @@ public class ManageController : Controller
 
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-        Guard.Against.Null(callbackUrl, nameof(callbackUrl));
+        _ = Guard.Against.Null(callbackUrl, nameof(callbackUrl));
         var email = user.Email;
         if (email == null)
         {
@@ -429,7 +429,7 @@ public class ManageController : Controller
             return View(model);
         }
 
-        await _userManager.SetTwoFactorEnabledAsync(user, true);
+        _ = await _userManager.SetTwoFactorEnabledAsync(user, true);
         _logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
         var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10) ?? new List<string>();
         TempData[RecoveryCodesKey] = recoveryCodes.ToArray();
@@ -453,8 +453,8 @@ public class ManageController : Controller
             throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
-        await _userManager.SetTwoFactorEnabledAsync(user, false);
-        await _userManager.ResetAuthenticatorKeyAsync(user);
+        _ = await _userManager.SetTwoFactorEnabledAsync(user, false);
+        _ = await _userManager.ResetAuthenticatorKeyAsync(user);
         _logger.LogInformation("User with id '{UserId}' has reset their authentication app key.", user.Id);
 
         return RedirectToAction(nameof(EnableAuthenticator));
@@ -514,12 +514,12 @@ public class ManageController : Controller
         int currentPosition = 0;
         while (currentPosition + 4 < unformattedKey.Length)
         {
-            result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
+            _ = result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
             currentPosition += 4;
         }
         if (currentPosition < unformattedKey.Length)
         {
-            result.Append(unformattedKey.Substring(currentPosition));
+            _ = result.Append(unformattedKey.Substring(currentPosition));
         }
 
         return result.ToString().ToLowerInvariant();
@@ -539,7 +539,7 @@ public class ManageController : Controller
         var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
         if (string.IsNullOrEmpty(unformattedKey))
         {
-            await _userManager.ResetAuthenticatorKeyAsync(user);
+            _ = await _userManager.ResetAuthenticatorKeyAsync(user);
             unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
         }
 

@@ -19,7 +19,7 @@ public class CatalogItemViewModelService : ICatalogItemViewModelService
     {
         var existingCatalogItem = await _catalogItemRepository.GetByIdAsync(viewModel.Id);
 
-        Guard.Against.Null(existingCatalogItem, nameof(existingCatalogItem));
+        _ = Guard.Against.Null(existingCatalogItem, nameof(existingCatalogItem));
 
         CatalogItem.CatalogItemDetails details = new(viewModel.Name, existingCatalogItem.Description, viewModel.Price);
         existingCatalogItem.UpdateDetails(details);

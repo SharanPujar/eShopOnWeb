@@ -108,9 +108,9 @@ public class LoginModel : PageModel
         if (Request.Cookies.ContainsKey(Constants.BASKET_COOKIENAME))
         {
             var anonymousId = Request.Cookies[Constants.BASKET_COOKIENAME];
-            if (Guid.TryParse(anonymousId, out var _))
+            if (Guid.TryParse(anonymousId, out _))
             {
-                Guard.Against.NullOrEmpty(userName, nameof(userName));
+                _ = Guard.Against.NullOrEmpty(userName, nameof(userName));
                 await _basketService.TransferBasketAsync(anonymousId, userName);
             }
             Response.Cookies.Delete(Constants.BASKET_COOKIENAME);

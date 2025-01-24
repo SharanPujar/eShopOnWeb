@@ -8,13 +8,13 @@ public static class ConfigureWebServices
 {
     public static IServiceCollection AddWebServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(cfg => 
+        _ = services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(typeof(BasketViewModelService).Assembly));
-        services.AddScoped<IBasketViewModelService, BasketViewModelService>();
-        services.AddScoped<CatalogViewModelService>();
-        services.AddScoped<ICatalogItemViewModelService, CatalogItemViewModelService>();
-        services.Configure<CatalogSettings>(configuration);
-        services.AddScoped<ICatalogViewModelService, CachedCatalogViewModelService>();
+        _ = services.AddScoped<IBasketViewModelService, BasketViewModelService>();
+        _ = services.AddScoped<CatalogViewModelService>();
+        _ = services.AddScoped<ICatalogItemViewModelService, CatalogItemViewModelService>();
+        _ = services.Configure<CatalogSettings>(configuration);
+        _ = services.AddScoped<ICatalogViewModelService, CachedCatalogViewModelService>();
 
         return services;
     }

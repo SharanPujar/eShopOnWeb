@@ -34,7 +34,7 @@ public class Basket : ViewComponent
     {
         if (_signInManager.IsSignedIn(HttpContext.User))
         {
-            Guard.Against.Null(User?.Identity?.Name, nameof(User.Identity.Name));
+            _ = Guard.Against.Null(User?.Identity?.Name, nameof(User.Identity.Name));
             return await _basketService.CountTotalBasketItems(User.Identity.Name);
         }
 

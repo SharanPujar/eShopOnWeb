@@ -12,18 +12,18 @@ public static class ConfigureCoreServices
     public static IServiceCollection AddCoreServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
-        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+        _ = services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
+        _ = services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-        services.AddScoped<IBasketService, BasketService>();
-        services.AddScoped<IOrderService, OrderService>();
-        services.AddScoped<IBasketQueryService, BasketQueryService>();
+        _ = services.AddScoped<IBasketService, BasketService>();
+        _ = services.AddScoped<IOrderService, OrderService>();
+        _ = services.AddScoped<IBasketQueryService, BasketQueryService>();
 
         var catalogSettings = configuration.Get<CatalogSettings>() ?? new CatalogSettings();
-        services.AddSingleton<IUriComposer>(new UriComposer(catalogSettings));
+        _ = services.AddSingleton<IUriComposer>(new UriComposer(catalogSettings));
 
-        services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-        services.AddTransient<IEmailSender, EmailSender>();
+        _ = services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+        _ = services.AddTransient<IEmailSender, EmailSender>();
 
         return services;
     }

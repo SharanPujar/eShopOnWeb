@@ -41,7 +41,7 @@ public class BasketViewModelService : IBasketViewModelService
     private async Task<BasketViewModel> CreateBasketForUser(string userId)
     {
         var basket = new Basket(userId);
-        await _basketRepository.AddAsync(basket);
+        _ = await _basketRepository.AddAsync(basket);
 
         return new BasketViewModel()
         {

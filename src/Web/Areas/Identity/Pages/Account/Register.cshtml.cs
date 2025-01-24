@@ -81,7 +81,7 @@ public class RegisterModel : PageModel
                     values: new { userId = user.Id, code = code },
                     protocol: Request.Scheme);
 
-                Guard.Against.Null(callbackUrl, nameof(callbackUrl));
+                _ = Guard.Against.Null(callbackUrl, nameof(callbackUrl));
                 await _emailSender.SendEmailAsync(Input!.Email!, "Confirm your email",
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 

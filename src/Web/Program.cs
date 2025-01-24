@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿ // My first change
+using System.Net.Mime;
 using Ardalis.ListStartupServices;
 using Azure.Identity;
 using BlazorAdmin;
@@ -34,16 +35,16 @@ else
 {
     // Configure SQL Server (prod)
     var credential = new ChainedTokenCredential(new AzureDeveloperCliCredential(), new DefaultAzureCredential());
-    builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"] ?? ""), credential);
-    builder.Services.AddDbContext<CatalogContext>(c =>
+    _ = builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"] ?? ""), credential);
+    _ = builder.Services.AddDbContext<CatalogContext>(c =>
     {
         var connectionString = builder.Configuration[builder.Configuration["AZURE_SQL_CATALOG_CONNECTION_STRING_KEY"] ?? ""];
-        c.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+        _ = c.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
     });
-    builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+    _ = builder.Services.AddDbContext<AppIdentityDbContext>(options =>
     {
         var connectionString = builder.Configuration[builder.Configuration["AZURE_SQL_IDENTITY_CONNECTION_STRING_KEY"] ?? ""];
-        options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+        _ = options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
     });
 }
 
@@ -85,7 +86,7 @@ builder.Services.AddMvc(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages(options =>
 {
-    options.Conventions.AuthorizePage("/Basket/Checkout");
+    _ = options.Conventions.AuthorizePage("/Basket/Checkout");
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services
@@ -109,7 +110,7 @@ builder.Services.AddFeatureManagement();
 // Load configuration from Azure App Configuration
 if (useAppConfig)
 {
-    builder.Configuration.AddAzureAppConfiguration(options =>
+    _ = builder.Configuration.AddAzureAppConfiguration(options =>
     {
         var appConfigEndpoint = builder.Configuration["AppConfigEndpoint"];
 
@@ -118,11 +119,11 @@ if (useAppConfig)
             throw new Exception("AppConfigEndpoint is not set in the configuration. Please set AppConfigEndpoint in the configuration.");
         }
 
-        options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential())
+        _ = options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential())
         .ConfigureRefresh(refresh =>
         {
             // Default cache expiration is 30 seconds
-            refresh.Register("eShopWeb:Settings:NoResultsMessage").SetCacheExpiration(TimeSpan.FromSeconds(10));
+            _ = refresh.Register("eShopWeb:Settings:NoResultsMessage").SetCacheExpiration(TimeSpan.FromSeconds(10));
         })
         .UseFeatureFlags(featureFlagOptions =>
         {
@@ -157,7 +158,7 @@ var app = builder.Build();
 if (useAppConfig)
 {
     // Use Azure App Configuration middleware for dynamic configuration refresh.
-    app.UseAzureAppConfiguration();
+    _ = app.UseAzureAppConfiguration();
 }
 
 app.Logger.LogInformation("App created...");
@@ -186,7 +187,7 @@ using (var scope = app.Services.CreateScope())
 var catalogBaseUrl = builder.Configuration.GetValue(typeof(string), "CatalogBaseUrl") as string;
 if (!string.IsNullOrEmpty(catalogBaseUrl))
 {
-    app.Use((context, next) =>
+    _ = app.Use((context, next) =>
     {
         context.Request.PathBase = new PathString(catalogBaseUrl);
         return next();
@@ -214,16 +215,16 @@ app.UseHealthChecks("/health",
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
     app.Logger.LogInformation("Adding Development middleware...");
-    app.UseDeveloperExceptionPage();
-    app.UseShowAllServicesMiddleware();
-    app.UseMigrationsEndPoint();
+    _ = app.UseDeveloperExceptionPage();
+    _ = app.UseShowAllServicesMiddleware();
+    _ = app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
 }
 else
 {
     app.Logger.LogInformation("Adding non-Development middleware...");
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    _ = app.UseExceptionHandler("/Error");
+    _ = app.UseHsts();
 }
 
 app.UseHttpsRedirection();

@@ -53,7 +53,7 @@ public class CheckoutModel : PageModel
             }
 
             var updateModel = items.ToDictionary(b => b.Id.ToString(), b => b.Quantity);
-            await _basketService.SetQuantities(BasketModel.Id, updateModel);
+            _ = await _basketService.SetQuantities(BasketModel.Id, updateModel);
             await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
             await _basketService.DeleteBasketAsync(BasketModel.Id);
         }
@@ -69,7 +69,7 @@ public class CheckoutModel : PageModel
 
     private async Task SetBasketModelAsync()
     {
-        Guard.Against.Null(User?.Identity?.Name, nameof(User.Identity.Name));
+        _ = Guard.Against.Null(User?.Identity?.Name, nameof(User.Identity.Name));
         if (_signInManager.IsSignedIn(HttpContext.User))
         {
             BasketModel = await _basketViewModelService.GetOrCreateBasketForUser(User.Identity.Name);

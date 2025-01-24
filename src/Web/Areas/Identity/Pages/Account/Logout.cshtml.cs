@@ -34,7 +34,7 @@ public class LogoutModel : PageModel
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         var userId = _signInManager.Context.User.Claims.First(c => c.Type == ClaimTypes.Name);
         var identityKey = _signInManager.Context.Request.Cookies[ConfigureCookieSettings.IdentifierCookieName];
-        _cache.Set($"{userId.Value}:{identityKey}", identityKey, new MemoryCacheEntryOptions
+        _ = _cache.Set($"{userId.Value}:{identityKey}", identityKey, new MemoryCacheEntryOptions
         {
             AbsoluteExpiration = DateTime.Now.AddMinutes(ConfigureCookieSettings.ValidityMinutesPeriod)
         });
